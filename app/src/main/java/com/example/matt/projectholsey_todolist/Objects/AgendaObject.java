@@ -11,14 +11,19 @@ import com.example.matt.projectholsey_todolist.Database.*;
 public class AgendaObject {
 
     //defining class / object variables
+    private int ID;
     private String Title;
-    private  int ID;
+    private String Created;
+
     //list of agenda_ContentObjects
     private ArrayList<Agenda_ContentsObject> AgendaContents = new ArrayList<>();
 
-    //Constructor
-    AgendaObject(String _title, ArrayList<Agenda_ContentsObject> _Contents)
-    {
+
+    //empty constructor
+    public AgendaObject(){}
+
+    //Constructor without ID
+    public AgendaObject(String _title, ArrayList<Agenda_ContentsObject> _Contents)    {
         this.Title = _title;
         this.AgendaContents = _Contents;
 
@@ -29,6 +34,22 @@ public class AgendaObject {
         this.ID = tempID;
 
     }
+
+    //constructor with ID
+    public AgendaObject(int ID, String title, String created, ArrayList<Agenda_ContentsObject> agendaContents) {
+        this.ID = ID;
+        Title = title;
+        Created = created;
+        AgendaContents = agendaContents;
+    }
+
+    //Constructor without Arraylist
+    public AgendaObject(int ID, String title, String created) {
+        this.ID = ID;
+        Title = title;
+        Created = created;
+    }
+
 
     //method to get unique int
     public int getLastID()

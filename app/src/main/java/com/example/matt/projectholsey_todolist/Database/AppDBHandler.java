@@ -64,4 +64,39 @@ public class AppDBHandler extends SQLiteOpenHelper {
 
         onCreate(db);
     }
+
+    /*
+    TODO:
+
+    Functionality:
+    1) Add a new todoObject
+        1.1) Params - String (title)
+        1.2) Automatic assign new unique ID
+        1.3) Record datetime created
+    2) Add a new Agenda_ContentObject
+        2.1) Associate the ID of the content object with todoObject
+        2.2) Automatically make isSelected False
+        2.3) Assign a new unique ID to the object
+        2.4) Params - String (Content)
+    3) Delete Agenda_contentObject
+        3.1) Get the id of object to be delete
+        3.2) Delete the object from database
+    4) Delete todoObject
+        4.1) Get ID of object to be deleted
+        4.2) Remove all associated agenda_ContentObjects that have the same ID
+        4.3) delete the object
+    5) Editing....?
+
+
+
+     */
+
+
+
+
+
+
+
+
+
 }

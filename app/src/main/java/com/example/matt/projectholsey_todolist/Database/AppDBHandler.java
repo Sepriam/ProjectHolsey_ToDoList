@@ -3,7 +3,6 @@ package com.example.matt.projectholsey_todolist.Database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import java.util.Calendar;
@@ -13,6 +12,12 @@ import com.example.matt.projectholsey_todolist.Objects.toDoObject;
 
 /**
  * Created by Matt on 17/02/2018.
+ */
+
+
+/**
+ * NOTE TO SELF -- TITLE ID is the tag id
+ *
  */
 
 public class AppDBHandler extends SQLiteOpenHelper {
@@ -73,8 +78,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
-    private void addTODOtoDB(String _title)
-    {
+    private void addTODOtoDB(String _title) {
         //connect to local database
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -96,8 +100,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
-    private void addAgendaContentstoDB(String _title, String _content)
-    {
+    private void addAgendaContentstoDB(String _title, String _content) {
         //open connection to database
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -110,21 +113,19 @@ public class AppDBHandler extends SQLiteOpenHelper {
         //small query to find the id of the agendaObject from the string passed into this function
         String selectQuery = "SELECT * FROM " + TABLE_TITLES;
         Cursor cursor = db.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst())
-        {
+        if (cursor.moveToFirst()) {
             do {
                 TitleObject ao = new TitleObject();
 
                 ao.setID(Integer.parseInt(cursor.getString(0)));
                 ao.setTitle(cursor.getString(1));
                 //if the title is the same as string passed, assign the ID to temp id and break the loop
-                if (ao.getTitle() == _title)
-                {
+                if (ao.getTitle() == _title) {
                     TemptoDoID = ao.getID();
                     break;
                 }
 
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
 
         //putting values into content
@@ -140,8 +141,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
-    private void deleteTitleObject(String _title)
-    {
+    private void deleteTitleObject(String _title) {
         //Delete current object
         // delete all related agendaContentObjects
 
@@ -162,8 +162,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
                 ti.setTitle(cursor.getString(1));
 
                 //comparing the current queries title string to the string passed
-                if (ti.getTitle() == _title)
-                {
+                if (ti.getTitle() == _title) {
                     //set the temp id to id of current titleobject
                     tempID = ti.getID();
                     //call the function to delete all asscoiated objects
@@ -184,8 +183,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
-    private void deleteRelatedAgendaContentObjects(int _tempID, SQLiteDatabase db)
-    {
+    private void deleteRelatedAgendaContentObjects(int _tempID, SQLiteDatabase db) {
         //select all from database
         //delete where item.gettodoid = tempid
 
@@ -200,8 +198,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
                 toDoObject td = new toDoObject();
 
                 //ORDER = ID > TITLEID > TEXT > ISCOMPLETE
-                if (Integer.parseInt(cursor.getString(1)) == _tempID)
-                {
+                if (Integer.parseInt(cursor.getString(1)) == _tempID) {
                     //delete the current row
                     db.delete(TABLE_AGENDAS, KEY_TITLE_ID + " = " + _tempID, null);
 
@@ -213,13 +210,12 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
-    private void deleteToDoObject(toDoObject _tdO)
-    {
+    private void deleteToDoObject(toDoObject _tdO) {
         //select all from the table of agendas
         String selectQuery = "SELECT * FROM " + TABLE_AGENDAS;
 
         //create a temporary int to store the tagID of the toDoObject
-        int tempID =  _tdO.getTag_ID();
+        int tempID = _tdO.getTitle_ID();
 
         //create a connection to the database
         SQLiteDatabase db = this.getWritableDatabase();
@@ -233,8 +229,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
                 //order KEY_ID  KEY_TITLE_ID  KEY_TODO KEY_ISCOMPLETE + " TEXT" + ")";
 
                 //check if the tag id is equal to the object's tag id that was passed
-                if (Integer.parseInt(cursor.getString(0)) == tempID)
-                {
+                if (Integer.parseInt(cursor.getString(0)) == tempID) {
                     //if true, delete the item
                     db.delete(TABLE_AGENDAS, KEY_TITLE_ID + " = " + tempID, null);
                     //Break out the loop as single item was deleted
@@ -248,28 +243,41 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
-    private void updateStatusOfToDoObject(toDoObject _tdO, String _updateToDo)
-    {
+    private void updateContentOfToDoObject(toDoObject _tdO, String _updateToDo) {
         //select all from the table of agendas
         String selectQuery = "SELECT * FROM " + TABLE_AGENDAS;
 
         //create a temporary int to store the tagID of the toDoObject
-        int tempID =  _tdO.getTag_ID();
+        int tempID = _tdO.getTitle_ID();
 
         //create a connection to the database
         SQLiteDatabase db = this.getWritableDatabase();
         //situate the cursor on the first result of the query previously created
         Cursor cursor = db.rawQuery(selectQuery, null);
 
+        //create some content to put in db
+        ContentValues cv = new ContentValues();
+
         //move to first result
         if (cursor.moveToFirst()) {
             do {
 
                 //if the current tagId is equal to that of the toDoObject's passed
-                if (Integer.parseInt(cursor.getString(0)) == _tdO.getID())
-                {
+                if (Integer.parseInt(cursor.getString(0)) == _tdO.getTitle_ID()) {
+                    //putting values into content
+                    cv.put(KEY_ID, _tdO.getID());
+                    cv.put(KEY_TITLE_ID, _tdO.getTitle_ID());
+                    //updating the value of object with the string passed in params
+                    cv.put(KEY_TODO, _updateToDo);
+                    cv.put(KEY_ISCOMPLETE, _tdO.isComplete());
+
                     //set the toDoObject's string (content) to the string passed in params
                     _tdO.setItemToDo(_updateToDo);
+
+                    //updates the database
+                    db.update(TABLE_AGENDAS, cv, KEY_ID + " = ?", new String[]{String.valueOf(_tdO.getID())});
+                    //close the connection to the database
+                    db.close();
                 }
 
 
@@ -277,6 +285,56 @@ public class AppDBHandler extends SQLiteOpenHelper {
             //moveToNext 'moves' the cursor to the next item in database until end is reached in this case
         }
     }
+
+
+    private void updateBooleanOfToDoObject(toDoObject _tdO) {
+        //select all from the table of agendas
+        String selectQuery = "SELECT * FROM " + TABLE_AGENDAS;
+
+        //create a temporary int to store the tagID of the toDoObject
+        int tempID = _tdO.getID();
+
+        //create a connection to the database
+        SQLiteDatabase db = this.getWritableDatabase();
+        //situate the cursor on the first result of the query previously created
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        //create some content to put in db
+        ContentValues cv = new ContentValues();
+
+        //move to first result
+        if (cursor.moveToFirst()) {
+            do {
+
+                //check if the current item in focus in database is equal to the one passed in params
+                if (Integer.parseInt(cursor.getString(0)) == tempID) {
+                    {
+                        //putting values into content
+                        cv.put(KEY_ID, _tdO.getID());
+                        cv.put(KEY_TITLE_ID, _tdO.getTitle_ID());
+                        cv.put(KEY_TODO, _tdO.getItemToDo());
+
+                        //put the opposite value into the object dependant on what is currently selected
+                        if (!_tdO.isComplete()) {
+                            cv.put(KEY_ISCOMPLETE, "true");
+                            _tdO.setComplete(true);
+                        } else {
+                            cv.put(KEY_ISCOMPLETE, "false");
+                            _tdO.setComplete(false);
+                        }
+
+                        db.update(TABLE_AGENDAS, cv, KEY_ID + " = ?", new String[]{String.valueOf(_tdO.getID())});
+
+                        //DON'T NEED TO RETURN ANYTHING AS JUST UPDATING DATABASE WITH 1 NEW VALUE
+                        db.close();
+
+                    }
+
+
+                }
+            } while (cursor.moveToNext());
+            //moveToNext 'moves' the cursor to the next item in database until end is reached in this case
+        }
 
     /*
     TODO:
@@ -309,6 +367,5 @@ public class AppDBHandler extends SQLiteOpenHelper {
      */
 
 
-
-
+    }
 }

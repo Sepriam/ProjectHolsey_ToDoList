@@ -1,7 +1,5 @@
 package com.example.matt.projectholsey_todolist.Objects;
 
-import java.util.ArrayList;
-
 /**
  * Created by Matt on 17/02/2018.
  */
@@ -10,7 +8,7 @@ public class toDoObject {
 
     //variables for objects
     private int ID;
-    private int tag_ID;
+    private int Title_ID;
     private boolean IsComplete =  false;
     private String ItemToDo;
 
@@ -18,23 +16,23 @@ public class toDoObject {
     //empty constructor
     public toDoObject(){}
 
-    //constructor (without  tag_ID)
+    //constructor (without  Title_ID)
     public toDoObject(boolean isComplete, String itemToDo) {
         IsComplete = isComplete;
         ItemToDo = itemToDo;
     }
 
     //constructor (with tagID)
-    public toDoObject(int tag_ID, boolean isComplete, String itemToDo) {
-        this.tag_ID = tag_ID;
+    public toDoObject(int Title_ID, boolean isComplete, String itemToDo) {
+        this.Title_ID = Title_ID;
         IsComplete = isComplete;
         ItemToDo = itemToDo;
     }
 
     //constructor with all
-    public toDoObject(int ID, int tag_ID, boolean isComplete, String itemToDo) {
+    public toDoObject(int ID, int Title_ID, boolean isComplete, String itemToDo) {
         this.ID = ID;
-        this.tag_ID = tag_ID;
+        this.Title_ID = Title_ID;
         IsComplete = isComplete;
         ItemToDo = itemToDo;
     }
@@ -65,11 +63,11 @@ public class toDoObject {
         this.ID = ID;
     }
 
-    public int getTag_ID() {
-        return tag_ID;
+    public int getTitle_ID() {
+        return Title_ID;
     }
 
-    public void setTag_ID(int tag_ID) {
-        this.tag_ID = tag_ID;
+    public void setTitle_ID(int title_ID) {
+        this.Title_ID = title_ID;
     }
 }

@@ -247,6 +247,37 @@ public class AppDBHandler extends SQLiteOpenHelper {
 
     }
 
+
+    private void updateStatusOfToDoObject(toDoObject _tdO, String _updateToDo)
+    {
+        //select all from the table of agendas
+        String selectQuery = "SELECT * FROM " + TABLE_AGENDAS;
+
+        //create a temporary int to store the tagID of the toDoObject
+        int tempID =  _tdO.getTag_ID();
+
+        //create a connection to the database
+        SQLiteDatabase db = this.getWritableDatabase();
+        //situate the cursor on the first result of the query previously created
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        //move to first result
+        if (cursor.moveToFirst()) {
+            do {
+
+                //if the current tagId is equal to that of the toDoObject's passed
+                if (Integer.parseInt(cursor.getString(0)) == _tdO.getID())
+                {
+                    //set the toDoObject's string (content) to the string passed in params
+                    _tdO.setItemToDo(_updateToDo);
+                }
+
+
+            } while (cursor.moveToNext());
+            //moveToNext 'moves' the cursor to the next item in database until end is reached in this case
+        }
+    }
+
     /*
     TODO:
 
@@ -268,7 +299,11 @@ public class AppDBHandler extends SQLiteOpenHelper {
         4.2) Remove all associated agenda_ContentObjects that have the same ID
         4.3) delete the object
     5) Editing....?
-
+    6) Add a way to update the boolean of a current item
+        6.1) takes a titleID
+        6.2) takes a tagID
+        6.3) updates the value of the selected object
+        6.4) maybe return true if function executed as expected
 
 
      */

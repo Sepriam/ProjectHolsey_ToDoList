@@ -56,4 +56,20 @@ public class toDoObject {
     public void setItemToDo(String itemToDo) {
         ItemToDo = itemToDo;
     }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public int getTag_ID() {
+        return tag_ID;
+    }
+
+    public void setTag_ID(int tag_ID) {
+        this.tag_ID = tag_ID;
+    }
 }

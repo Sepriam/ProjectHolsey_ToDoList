@@ -3,6 +3,7 @@ package com.example.matt.projectholsey_todolist.Database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import java.util.Calendar;
@@ -139,7 +140,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
-    private void deleteTODOObject(String _title)
+    private void deleteTitleObject(String _title)
     {
         //Delete current object
         // delete all related agendaContentObjects
@@ -212,6 +213,39 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
+    private void deleteToDoObject(toDoObject _tdO)
+    {
+        //select all from the table of agendas
+        String selectQuery = "SELECT * FROM " + TABLE_AGENDAS;
+
+        //create a temporary int to store the tagID of the toDoObject
+        int tempID =  _tdO.getTag_ID();
+
+        //create a connection to the database
+        SQLiteDatabase db = this.getWritableDatabase();
+        //situate the cursor on the first result of the query previously created
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        //move to first result
+        if (cursor.moveToFirst()) {
+            do {
+
+                //order KEY_ID  KEY_TITLE_ID  KEY_TODO KEY_ISCOMPLETE + " TEXT" + ")";
+
+                //check if the tag id is equal to the object's tag id that was passed
+                if (Integer.parseInt(cursor.getString(0)) == tempID)
+                {
+                    //if true, delete the item
+                    db.delete(TABLE_AGENDAS, KEY_TITLE_ID + " = " + tempID, null);
+                    //Break out the loop as single item was deleted
+                    break;
+                }
+
+            } while (cursor.moveToNext());
+            //moveToNext 'moves' the cursor to the next item in database until end is reached in this case
+        }
+
+    }
 
     /*
     TODO:
@@ -238,11 +272,6 @@ public class AppDBHandler extends SQLiteOpenHelper {
 
 
      */
-
-
-
-
-
 
 
 

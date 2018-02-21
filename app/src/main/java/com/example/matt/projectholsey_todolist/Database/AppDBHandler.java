@@ -1,8 +1,13 @@
 package com.example.matt.projectholsey_todolist.Database;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import java.util.Calendar;
+
+import com.example.matt.projectholsey_todolist.Objects.AgendaObject;
 
 /**
  * Created by Matt on 17/02/2018.
@@ -64,6 +69,74 @@ public class AppDBHandler extends SQLiteOpenHelper {
 
         onCreate(db);
     }
+
+
+    private void addTODOtoDB(String _title)
+    {
+        //connect to local database
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //create new content for db
+        ContentValues values = new ContentValues();
+
+        //Value Order: ID > Title > DateCreated
+
+        //ID should be automatically chosen as it's primary key
+        values.put(KEY_TITLE, _title);
+        //assign the keyCreated to current datetime
+        values.put(KEY_CREATED, Calendar.getInstance().getTime().toString());
+
+        //insert values into database
+        db.insert(TABLE_TITLES, null, values);
+        //close database interaction
+        db.close();
+
+    }
+
+
+    private void addAgendaContentstoDB(String _title, String _content)
+    {
+        //open connection to database
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //create new content fro database
+        ContentValues values = new ContentValues();
+
+        //create new temp ID to store ID of the AgendaObject
+        int TemptoDoID = 0;
+
+        //small query to find the id of the agendaObject from the string passed into this function
+        String selectQuery = "SELECT * FROM " + TABLE_TITLES;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst())
+        {
+            do {
+                AgendaObject ao = new AgendaObject();
+
+                ao.setID(Integer.parseInt(cursor.getString(0)));
+                ao.setTitle(cursor.getString(1));
+                //if the title is the same as string passed, assign the ID to temp id and break the loop
+                if (ao.getTitle() == _title)
+                {
+                    TemptoDoID = ao.getID();
+                    break;
+                }
+
+            }while (cursor.moveToNext());
+        }
+
+        //putting values into content
+        values.put(KEY_TODO_ID, TemptoDoID);
+        values.put(KEY_TODO, _content);
+        //default set the isCompelete to false
+        values.put(KEY_ISCOMPLETE, "false");
+
+        //insert values into database
+        db.insert(TABLE_AGENDAS, null, values);
+        //close database interaction
+        db.close();
+    }
+
 
     /*
     TODO:

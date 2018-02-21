@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.Calendar;
 
 import com.example.matt.projectholsey_todolist.Objects.TitleObject;
+import com.example.matt.projectholsey_todolist.Objects.toDoObject;
 
 /**
  * Created by Matt on 17/02/2018.
@@ -34,7 +35,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
     private static final String KEY_CREATED = "created";
 
     //Columns in Agendas Table
-    private static final String KEY_TODO_ID = "tag_id";
+    private static final String KEY_TITLE_ID = "tag_id";
     private static final String KEY_TODO = "todo";
     private static final String KEY_ISCOMPLETE = "status";
 
@@ -51,7 +52,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
 
     //AGENDAS TABLE
     private static String CREATE_AGENDAS_TABLE = "CREATE TABLE " + TABLE_AGENDAS + "(" + KEY_ID + " INTEGER PRIMARY KEY, "
-            + KEY_TODO_ID + " INTEGER, " + KEY_TODO + " TEXT, " + KEY_ISCOMPLETE + " TEXT" + ")";
+            + KEY_TITLE_ID + " INTEGER, " + KEY_TODO + " TEXT, " + KEY_ISCOMPLETE + " TEXT" + ")";
 
 
     @Override
@@ -126,7 +127,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
         }
 
         //putting values into content
-        values.put(KEY_TODO_ID, TemptoDoID);
+        values.put(KEY_TITLE_ID, TemptoDoID);
         values.put(KEY_TODO, _content);
         //default set the isCompelete to false
         values.put(KEY_ISCOMPLETE, "false");
@@ -142,13 +143,72 @@ public class AppDBHandler extends SQLiteOpenHelper {
     {
         //Delete current object
         // delete all related agendaContentObjects
+
+        String selectQuery = "SELECT * FROM " + TABLE_TITLES;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        //creating a temporary id as to pass to delete all associated todoObjects
+        int tempID = 0;
+
+        if (cursor.moveToFirst()) {
+            do {
+                //instanciating a new titleObject
+                TitleObject ti = new TitleObject();
+
+                //setting the title of the new object instance to the one currently in focus in db query
+                ti.setTitle(cursor.getString(1));
+
+                //comparing the current queries title string to the string passed
+                if (ti.getTitle() == _title)
+                {
+                    //set the temp id to id of current titleobject
+                    tempID = ti.getID();
+                    //call the function to delete all asscoiated objects
+                    deleteRelatedAgendaContentObjects(tempID, db);
+
+                    //need to delete the current row
+                    db.delete(TABLE_TITLES, KEY_ID + " = " + tempID, null);
+                    //break out of loop
+                    break;
+                }
+
+            } while (cursor.moveToNext());
+            //moveToNext 'moves' the cursor to the next item in database until end is reached in this case
+        }
+
+        //close entry to database
+        db.close();
     }
 
 
-    private void deleteRelatedAgendaContentObjects(int _tempID)
+    private void deleteRelatedAgendaContentObjects(int _tempID, SQLiteDatabase db)
     {
         //select all from database
         //delete where item.gettodoid = tempid
+
+        String selectQuery = "SELECT * FROM " + TABLE_AGENDAS;
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        //moveToFirst will 'move' cursor to first item in database
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                toDoObject td = new toDoObject();
+
+                //ORDER = ID > TITLEID > TEXT > ISCOMPLETE
+                if (Integer.parseInt(cursor.getString(1)) == _tempID)
+                {
+                    //delete the current row
+                    db.delete(TABLE_AGENDAS, KEY_TITLE_ID + " = " + _tempID, null);
+
+                }
+
+            } while (cursor.moveToNext());
+            //moveToNext 'moves' the cursor to the next item in database until end is reached in this case
+        }
     }
 
 

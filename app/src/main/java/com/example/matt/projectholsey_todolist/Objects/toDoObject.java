@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by Matt on 17/02/2018.
  */
 
-public class Agenda_ContentsObject {
+public class toDoObject {
 
     //variables for objects
     private int ID;
@@ -16,23 +16,23 @@ public class Agenda_ContentsObject {
 
 
     //empty constructor
-    public Agenda_ContentsObject(){}
+    public toDoObject(){}
 
     //constructor (without  tag_ID)
-    public Agenda_ContentsObject(boolean isComplete, String itemToDo) {
+    public toDoObject(boolean isComplete, String itemToDo) {
         IsComplete = isComplete;
         ItemToDo = itemToDo;
     }
 
     //constructor (with tagID)
-    public Agenda_ContentsObject(int tag_ID, boolean isComplete, String itemToDo) {
+    public toDoObject(int tag_ID, boolean isComplete, String itemToDo) {
         this.tag_ID = tag_ID;
         IsComplete = isComplete;
         ItemToDo = itemToDo;
     }
 
     //constructor with all
-    public Agenda_ContentsObject(int ID, int tag_ID, boolean isComplete, String itemToDo) {
+    public toDoObject(int ID, int tag_ID, boolean isComplete, String itemToDo) {
         this.ID = ID;
         this.tag_ID = tag_ID;
         IsComplete = isComplete;

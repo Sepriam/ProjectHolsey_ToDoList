@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import java.util.Calendar;
 
-import com.example.matt.projectholsey_todolist.Objects.AgendaObject;
+import com.example.matt.projectholsey_todolist.Objects.TitleObject;
 
 /**
  * Created by Matt on 17/02/2018.
@@ -102,7 +102,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
         //create new content fro database
         ContentValues values = new ContentValues();
 
-        //create new temp ID to store ID of the AgendaObject
+        //create new temp ID to store ID of the TitleObject
         int TemptoDoID = 0;
 
         //small query to find the id of the agendaObject from the string passed into this function
@@ -111,7 +111,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst())
         {
             do {
-                AgendaObject ao = new AgendaObject();
+                TitleObject ao = new TitleObject();
 
                 ao.setID(Integer.parseInt(cursor.getString(0)));
                 ao.setTitle(cursor.getString(1));
@@ -136,6 +136,21 @@ public class AppDBHandler extends SQLiteOpenHelper {
         //close database interaction
         db.close();
     }
+
+
+    private void deleteTODOObject(String _title)
+    {
+        //Delete current object
+        // delete all related agendaContentObjects
+    }
+
+
+    private void deleteRelatedAgendaContentObjects(int _tempID)
+    {
+        //select all from database
+        //delete where item.gettodoid = tempid
+    }
+
 
 
     /*

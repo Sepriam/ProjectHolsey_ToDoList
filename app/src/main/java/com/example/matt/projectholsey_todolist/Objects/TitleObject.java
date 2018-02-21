@@ -1,14 +1,13 @@
 package com.example.matt.projectholsey_todolist.Objects;
 
 import java.util.ArrayList;
-import com.example.matt.projectholsey_todolist.Database.*;
 
 
 /**
  * Created by Matt on 17/02/2018.
  */
 
-public class AgendaObject {
+public class TitleObject {
 
     //defining class / object variables
     private int ID;
@@ -16,14 +15,14 @@ public class AgendaObject {
     private String Created;
 
     //list of agenda_ContentObjects
-    private ArrayList<Agenda_ContentsObject> AgendaContents = new ArrayList<>();
+    private ArrayList<toDoObject> AgendaContents = new ArrayList<>();
 
 
     //empty constructor
-    public AgendaObject(){}
+    public TitleObject(){}
 
     //Constructor without ID
-    public AgendaObject(String _title, ArrayList<Agenda_ContentsObject> _Contents)    {
+    public TitleObject(String _title, ArrayList<toDoObject> _Contents)    {
         this.Title = _title;
         this.AgendaContents = _Contents;
 
@@ -36,7 +35,7 @@ public class AgendaObject {
     }
 
     //constructor with ID
-    public AgendaObject(int ID, String title, String created, ArrayList<Agenda_ContentsObject> agendaContents) {
+    public TitleObject(int ID, String title, String created, ArrayList<toDoObject> agendaContents) {
         this.ID = ID;
         Title = title;
         Created = created;
@@ -44,7 +43,7 @@ public class AgendaObject {
     }
 
     //Constructor without Arraylist
-    public AgendaObject(int ID, String title, String created) {
+    public TitleObject(int ID, String title, String created) {
         this.ID = ID;
         Title = title;
         Created = created;
@@ -79,11 +78,11 @@ public class AgendaObject {
         this.ID = ID;
     }
 
-    public ArrayList<Agenda_ContentsObject> getAgendaContents() {
+    public ArrayList<toDoObject> getAgendaContents() {
         return AgendaContents;
     }
 
-    public void setAgendaContents(ArrayList<Agenda_ContentsObject> agendaContents) {
+    public void setAgendaContents(ArrayList<toDoObject> agendaContents) {
         AgendaContents = agendaContents;
     }
 }

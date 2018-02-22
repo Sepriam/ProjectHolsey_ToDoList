@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import com.example.matt.projectholsey_todolist.Objects.TitleObject;
@@ -336,6 +338,51 @@ public class AppDBHandler extends SQLiteOpenHelper {
             //moveToNext 'moves' the cursor to the next item in database until end is reached in this case
         }
 
+
+
+
+    }
+
+
+    public ArrayList<toDoObject> returnToDoObjects(int _titleID) {
+        //select all from the table of agendas
+        String selectQuery = "SELECT * FROM " + TABLE_AGENDAS;
+
+        //create a connection to the database
+        SQLiteDatabase db = this.getWritableDatabase();
+        //situate the cursor on the first result of the query previously created
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        //creating a return list of todoObjects
+        ArrayList<toDoObject> returnList = new ArrayList<>();
+
+
+        //move to first result
+        if (cursor.moveToFirst()) {
+            do {
+                //condition to see if passed ID is equal to current db object's title ID
+                if (Integer.parseInt(cursor.getString(1)) == _titleID)
+                {
+                    toDoObject tempObject = new toDoObject();
+                    tempObject.setID(Integer.parseInt(cursor.getString(0)));
+                    tempObject.setTitle_ID(Integer.parseInt(cursor.getString(1)));
+                    tempObject.setItemToDo(cursor.getString(2));
+                    tempObject.setComplete(Boolean.parseBoolean(cursor.getString(3)));
+
+                    returnList.add(tempObject);
+                }
+
+
+            } while (cursor.moveToNext());
+            //moveToNext 'moves' the cursor to the next item in database until end is reached in this case
+        }
+
+        //return list of toDoObjects
+        return returnList;
+    }
+
+
+
     /*
     TODO:
 
@@ -362,10 +409,11 @@ public class AppDBHandler extends SQLiteOpenHelper {
         6.2) takes a tagID
         6.3) updates the value of the selected object
         6.4) maybe return true if function executed as expected
-
+    7) return list of ToDoObjects
+        7.1) Takes the titleId as a param
+        7.2) Compares all todoObject's todoID to the param
+        7.3) if true, add this object to the list
+        7.4) repeat 7.3 until all objects are found
 
      */
-
-
-    }
 }

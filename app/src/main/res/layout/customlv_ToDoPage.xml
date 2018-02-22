@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:orientation="horizontal"
     android:layout_height="match_parent">
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/AgendaCV"/>
+        android:layout_weight="0.1"
+        android:id="@+id/ToDo_CB"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/AgendaTV"
+        android:id="@+id/ToDo_ET"
+        android:layout_weight="0.8"
         android:hint="Item to do"/>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1"
+        android:id="@+id/DeleteToDo_Btn"/>
+
 
 
 </LinearLayout>

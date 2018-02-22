@@ -10,6 +10,6 @@ public class ViewAllNoteTitles_StartPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_all_note_titles__start_page);
+        setContentView(R.layout.activity__titles__start_page);
     }
 }

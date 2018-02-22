@@ -10,12 +10,14 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.1"
         android:id="@+id/ToDo_CB"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ToDo_ET"
         android:layout_weight="0.8"
         android:hint="Item to do"/>
+
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

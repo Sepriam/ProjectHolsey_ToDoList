@@ -85,4 +85,12 @@ public class TitleObject {
     public void setAgendaContents(ArrayList<toDoObject> agendaContents) {
         AgendaContents = agendaContents;
     }
+
+    public String getCreated() {
+        return Created;
+    }
+
+    public void setCreated(String created) {
+        Created = created;
+    }
 }

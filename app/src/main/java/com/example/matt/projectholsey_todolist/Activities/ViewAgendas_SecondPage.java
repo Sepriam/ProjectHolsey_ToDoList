@@ -10,6 +10,6 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_toDoObjects__second_page);
+        setContentView(R.layout.activity_todoobjects__second_page);
     }
 }

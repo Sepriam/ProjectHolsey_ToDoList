@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,6 +28,9 @@ public class AppDBHandler extends SQLiteOpenHelper {
     //Database Version
     private static final int DATABASE_VERSION = 1;
 
+    //Default value for titleObject's String
+    private final String TITLEDEFAULTSTRINGVALUE = "ToDo List";
+
     // Database Name
     private static final String DATABASE_NAME = "TO_DO_LIST_DB";//"exerciseDatabase.db";
 
@@ -47,7 +51,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
     private static final String KEY_TODO = "todo";
     private static final String KEY_ISCOMPLETE = "status";
 
-
+    //default constructor for
     public AppDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -95,7 +99,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
         if (_title.equals(""))
         {
             //if there's no string passed default value to ToDoList
-            values.put(KEY_TITLE, "ToDo List");
+            values.put(KEY_TITLE, TITLEDEFAULTSTRINGVALUE);
         }
         else
             values.put(KEY_TITLE, _title);
@@ -113,6 +117,9 @@ public class AppDBHandler extends SQLiteOpenHelper {
 
     //In the case there's no string passed
     public void addTODOtoDB() {
+
+        Log.d("No Item Passed", "No items were passed to addTitleObjectToDB. Adding Default String value");
+
         //connect to local database
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -124,7 +131,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
         //ID should be automatically chosen as it's primary key
 
         //Default the string value to ToDoList if there's none passed in params
-        values.put(KEY_TITLE, "ToDo List");
+        values.put(KEY_TITLE, TITLEDEFAULTSTRINGVALUE);
         //assign the keyCreated to current datetime
         values.put(KEY_CREATED, Calendar.getInstance().getTime().toString());
 

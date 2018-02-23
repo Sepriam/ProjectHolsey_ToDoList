@@ -80,7 +80,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
-    private void addTODOtoDB(String _title) {
+    public void addTODOtoDB(String _title) {
         //connect to local database
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -102,7 +102,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
-    private void addAgendaContentstoDB(String _title, String _content) {
+    public void addAgendaContentstoDB(String _title, String _content) {
         //open connection to database
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -143,7 +143,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
-    private void deleteTitleObject(String _title) {
+    public void deleteTitleObject(String _title) {
         //Delete current object
         // delete all related agendaContentObjects
 
@@ -185,7 +185,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
-    private void deleteRelatedAgendaContentObjects(int _tempID, SQLiteDatabase db) {
+    public void deleteRelatedAgendaContentObjects(int _tempID, SQLiteDatabase db) {
         //select all from database
         //delete where item.gettodoid = tempid
 
@@ -212,7 +212,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
-    private void deleteToDoObject(toDoObject _tdO) {
+    public void deleteToDoObject(toDoObject _tdO) {
         //select all from the table of agendas
         String selectQuery = "SELECT * FROM " + TABLE_AGENDAS;
 
@@ -245,7 +245,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
-    private void updateContentOfToDoObject(toDoObject _tdO, String _updateToDo) {
+    public void updateContentOfToDoObject(toDoObject _tdO, String _updateToDo) {
         //select all from the table of agendas
         String selectQuery = "SELECT * FROM " + TABLE_AGENDAS;
 
@@ -289,7 +289,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
-    private void updateBooleanOfToDoObject(toDoObject _tdO) {
+    public void updateBooleanOfToDoObject(toDoObject _tdO) {
         //select all from the table of agendas
         String selectQuery = "SELECT * FROM " + TABLE_AGENDAS;
 

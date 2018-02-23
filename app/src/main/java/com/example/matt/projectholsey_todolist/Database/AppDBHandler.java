@@ -90,7 +90,41 @@ public class AppDBHandler extends SQLiteOpenHelper {
         //Value Order: ID > Title > DateCreated
 
         //ID should be automatically chosen as it's primary key
-        values.put(KEY_TITLE, _title);
+        //assign string value to that passed in params
+
+        if (_title.equals(""))
+        {
+            //if there's no string passed default value to ToDoList
+            values.put(KEY_TITLE, "ToDo List");
+        }
+        else
+            values.put(KEY_TITLE, _title);
+
+
+        //assign the keyCreated to current datetime
+        values.put(KEY_CREATED, Calendar.getInstance().getTime().toString());
+
+        //insert values into database
+        db.insert(TABLE_TITLES, null, values);
+        //close database interaction
+        db.close();
+
+    }
+
+    //In the case there's no string passed
+    public void addTODOtoDB() {
+        //connect to local database
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //create new content for db
+        ContentValues values = new ContentValues();
+
+        //Value Order: ID > Title > DateCreated
+
+        //ID should be automatically chosen as it's primary key
+
+        //Default the string value to ToDoList if there's none passed in params
+        values.put(KEY_TITLE, "ToDo List");
         //assign the keyCreated to current datetime
         values.put(KEY_CREATED, Calendar.getInstance().getTime().toString());
 

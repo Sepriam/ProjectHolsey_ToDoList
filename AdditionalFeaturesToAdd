@@ -1,0 +1,3 @@
+1) Sort the listview by order of descending date. This way the newest note will always be at the top -- could also do by descending id
+2) Button to add a new ToDo object must be at the top. Stops user having to scroll through multiple different items in order to add a new one (Bad UI design)
+3) 

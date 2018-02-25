@@ -26,6 +26,8 @@ import java.util.List;
 
 public class ToDoPageLVAdapter extends ArrayAdapter<toDoObject>{
 
+    //need to commit this
+
     ArrayList<toDoObject> toDoObject_List = new ArrayList<>();
 
     public ToDoPageLVAdapter(Context context, int resource, ArrayList<toDoObject> objects) {

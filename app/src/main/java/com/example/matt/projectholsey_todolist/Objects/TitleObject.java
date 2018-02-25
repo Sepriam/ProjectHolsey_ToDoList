@@ -1,5 +1,6 @@
 package com.example.matt.projectholsey_todolist.Objects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -7,7 +8,7 @@ import java.util.ArrayList;
  * Created by Matt on 17/02/2018.
  */
 
-public class TitleObject {
+public class TitleObject implements Serializable {
 
     //defining class / object variables
     private int ID;

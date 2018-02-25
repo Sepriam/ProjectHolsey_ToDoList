@@ -423,8 +423,37 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
+    public TitleObject returnLastTitleObject()
+    {
+        //creating a temporary titleObject
+        TitleObject tempTitleObject = new TitleObject();
 
-    /*
+        //Creating connection to SQLite Database
+        //create a connection to the database
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //Creating query
+        String query = "SELECT * FROM " + TABLE_TITLES + " WHERE " + KEY_ID + "=( SELECT MAX(" + KEY_ID + ") FROM " + TABLE_TITLES + ")";
+
+        //Executing query
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+
+            //order : KEY_ID  KEY_TITLE  KEY_CREATED
+            tempTitleObject.setID(Integer.parseInt(cursor.getString(0)));
+            tempTitleObject.setTitle(cursor.getString(1));
+            tempTitleObject.setCreated(cursor.getString(2));
+
+        }
+
+        return tempTitleObject;
+
+
+    }
+
+
+     /*
     TODO:
 
     Functionality:
@@ -455,6 +484,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
         7.2) Compares all todoObject's todoID to the param
         7.3) if true, add this object to the list
         7.4) repeat 7.3 until all objects are found
+    8) Create a way to return the last object passed
 
      */
 }

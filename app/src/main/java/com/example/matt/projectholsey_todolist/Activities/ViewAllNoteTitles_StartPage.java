@@ -36,15 +36,6 @@ public class ViewAllNoteTitles_StartPage extends AppCompatActivity {
 
     }
 
-
-    private void createNewToDoObject_BtnClick(View view)
-    {
-        //starting new activity for the user to select muscle groups
-        Intent i = new Intent(this, ViewAgendas_SecondPage.class);
-        startActivityForResult(i, REQUEST_CODE);
-    }
-
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -62,5 +53,11 @@ public class ViewAllNoteTitles_StartPage extends AppCompatActivity {
 
             }
         }
+    }
+
+    public void createNewToDoObject_BtnClick(View view) {
+        //starting new activity for the user to select muscle groups
+        Intent i = new Intent(this, ViewAgendas_SecondPage.class);
+        startActivityForResult(i, REQUEST_CODE);
     }
 }

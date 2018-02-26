@@ -62,7 +62,7 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
         if (recieveIntent.getExtras() == null)
         {
             db.addTODOtoDB();
-            titleString_ET.setText(TITLEDEFAULTSTRINGVALUE);
+            titleString_ET.setHint(TITLEDEFAULTSTRINGVALUE);
             //Call a function to return the last created object in database and add here
             TI = db.returnLastTitleObject();
         }
@@ -86,7 +86,7 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
     }
 
 
-    private void saveToDo_BtnClick(View view)
+    public void saveToDo_BtnClick(View view)
     {
         //create connection to db class
         AppDBHandler db = new AppDBHandler(this);
@@ -111,5 +111,26 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
         returnResult.putExtra("_result", TI);
         setResult(RESULT_OK,returnResult);
         finish();
+    }
+
+
+    public void addNewToDo_BtnClick(View view)
+    {
+        //need to add new todoObject to database
+        //then load that object into listview
+
+        //create new instance of db class
+        AppDBHandler db = new AppDBHandler(this);
+        //no content for time being
+        db.addAgendaContentstoDB(TITLEDEFAULTSTRINGVALUE, "");
+        //create a new toDoObject for List
+        toDoObject newtoDoObject = new toDoObject();
+        //assign to do object to last entry into database
+        newtoDoObject = db.returnLastTodoObject();
+        //add toDoObject to Listview
+        listOfToDoObjects.add(newtoDoObject);
+        //update listViewAdapter
+        _toDoPageAdapter.refreshList(listOfToDoObjects);
+
     }
 }

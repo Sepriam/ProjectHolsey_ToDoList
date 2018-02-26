@@ -10,9 +10,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <EditText
             android:layout_width="wrap_content"
@@ -20,17 +19,20 @@
             android:id="@+id/TitleInput_ET"
             android:hint="title"
             android:layout_gravity="center|top"/>
-
-        <ScrollView
+        <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/AddNewToDoObject_Btn"
+            android:hint="New Item"
+            android:onClick="addNewToDo_BtnClick"/>
 
-            <ListView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ToDoPage_LV"/>
 
-        </ScrollView>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ToDoPage_LV"/>
+
 
 
     </LinearLayout>
@@ -41,6 +43,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/SaveToDo_Btn"
+        android:onClick="saveToDo_BtnClick"
         android:text="Save"/>
 
 </RelativeLayout>

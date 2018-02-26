@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.matt.projectholsey_todolist.Database.AppDBHandler;
 import com.example.matt.projectholsey_todolist.Objects.TitleObject;
@@ -85,6 +86,24 @@ public class ToDoPageLVAdapter extends ArrayAdapter<toDoObject>{
                 }
             });
 
+            //creating an on clickListener for the checkbox
+            holder.toDoObject_CB.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //assign variable to view of checkbox press
+                    CheckBox toDoCheckBox =  (CheckBox) view;
+                    //grab the item associated with that view's checkbox
+                    toDoObject TDO = (toDoObject) toDoCheckBox.getTag();
+                    //set the boolean value of the item to whatever it is not currently
+                    TDO.setComplete(toDoCheckBox.isChecked());
+
+                    //make a quick toast to see if the items have different id's
+                    Toast.makeText(getContext(), "TODOOBJECT ID : " + TDO.getID() + ", IS NOW " + TDO.isComplete(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+
             // need to create a new checkbox listener to change the value of the boolean for current object
 
         }
@@ -93,12 +112,31 @@ public class ToDoPageLVAdapter extends ArrayAdapter<toDoObject>{
             holder = (ViewHolder) convertView.getTag();
         }
 
+        //creating the toDoObject
+        toDoObject ToDoObj = new toDoObject();
+
         //selecting the object from listview
-        toDoObject ToDoObj = toDoObject_List.get(position);
+        if (toDoObject_List.size() == 0)
+        {
+            Log.d("New Title Object:", "No Items located in listview");
+        }
+        else
+            ToDoObj =  toDoObject_List.get(position);
 
         //set tag to the button -- As to use for on click method to delete this object
         holder.toDoObject_CB.setTag(ToDoObj);
 
         return convertView;
+    }
+
+    //creating a way to refresh the listview
+    public void refreshList(ArrayList<toDoObject> newList)
+    {
+        //clearing current list
+        this.toDoObject_List.clear();
+        //adding new list passed
+        this.toDoObject_List.addAll(newList);
+        //updating the listview
+        notifyDataSetChanged();
     }
 }

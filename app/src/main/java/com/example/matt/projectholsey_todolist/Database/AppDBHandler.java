@@ -429,7 +429,6 @@ public class AppDBHandler extends SQLiteOpenHelper {
         TitleObject tempTitleObject = new TitleObject();
 
         //Creating connection to SQLite Database
-        //create a connection to the database
         SQLiteDatabase db = this.getWritableDatabase();
 
         //Creating query
@@ -448,11 +447,40 @@ public class AppDBHandler extends SQLiteOpenHelper {
         }
 
         return tempTitleObject;
-
-
     }
 
 
+    public toDoObject returnLastTodoObject()
+    {
+        //creating a temporary toDoObject
+        toDoObject temptoDoObject = new toDoObject();
+
+        //Creating connection to SQLite Database
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //Creating query
+        String query = "SELECT * FROM " + TABLE_AGENDAS + " WHERE " + KEY_ID + "=( SELECT MAX(" + KEY_ID + ") FROM " + TABLE_AGENDAS + ")";
+
+        //Executing query
+        Cursor cursor = db.rawQuery(query, null);
+
+            /*
+            Order: KEY_ID + KEY_TITLE_ID + KEY_TODO + KEY_ISCOMPLETE +
+            */
+
+        if (cursor.moveToFirst()) {
+
+            //order : KEY_ID  KEY_TITLE  KEY_CREATED
+            temptoDoObject.setID(Integer.parseInt(cursor.getString(0)));
+            temptoDoObject.setTitle_ID(Integer.parseInt(cursor.getString(1)));
+            temptoDoObject.setItemToDo(cursor.getString(2));
+            temptoDoObject.setComplete(Boolean.parseBoolean(cursor.getString(3)));
+
+        }
+
+        return temptoDoObject;
+
+    }
      /*
     TODO:
 

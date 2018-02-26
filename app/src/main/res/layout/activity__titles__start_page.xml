@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,9 +8,22 @@
     android:layout_height="match_parent"
     tools:context="com.example.matt.projectholsey_todolist.Activities.ViewAllNoteTitles_StartPage">
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/TitlePage_Lv"/>
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/addNewTitleObject"
+        android:hint="Add New Item"
+        android:onClick="createNewToDoObject_BtnClick"/>
 
-</ScrollView>
+    <ScrollView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/TitlePage_Lv"/>
+
+    </ScrollView>
+
+</LinearLayout>

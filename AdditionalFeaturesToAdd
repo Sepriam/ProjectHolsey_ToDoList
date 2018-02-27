@@ -5,3 +5,12 @@
 5) Think of a way to allow a user to edit the object real-time (would using a onTextChanged Listener be inefficient? -- Maybe but would work)
 6) Add a check to make sure the ToDoItems are not repeatedly added to Database
 7) Add onActivityResult - add the TitleObject passed back to the list associated with listView and update listview
+8) add button to implement new add title object
+9) set default toDoEdittext hint to default string ("ToDo List")
+10) Create button to add new toDoObject
+11) Button to add new toDoObject must also update listview
+12) Button must first add new object to database before retrieving and updating listview
+13) Listview needs to be spaced properly
+14) Object must identify which ID is being updated on checkbox click
+15) Delete button must be sorted in order to not cause crash (null object ref from titleObject)
+16) Program must update the titleListview on start and on resume / onreturn from previous page.

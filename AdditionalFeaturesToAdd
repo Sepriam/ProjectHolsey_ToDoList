@@ -1,16 +1,16 @@
 1) Sort the listview by order of descending date. This way the newest note will always be at the top -- could also do by descending id
-2) Button to add a new ToDo object must be at the top. Stops user having to scroll through multiple different items in order to add a new one (Bad UI design)
-3) Create an onclick listener for the delete button function in the titlePage Adapter class
-4) Create a button to save the objects on todoPage (save and return or something)
+√ 2) Button to add a new ToDo object must be at the top. Stops user having to scroll through multiple different items in order to add a new one (Bad UI design)
+√ 3) Create an onclick listener for the delete button function in the titlePage Adapter class
+√ 4) Create a button to save the objects on todoPage (save and return or something)
 5) Think of a way to allow a user to edit the object real-time (would using a onTextChanged Listener be inefficient? -- Maybe but would work)
 6) Add a check to make sure the ToDoItems are not repeatedly added to Database
 7) Add onActivityResult - add the TitleObject passed back to the list associated with listView and update listview
-8) add button to implement new add title object
-9) set default toDoEdittext hint to default string ("ToDo List")
-10) Create button to add new toDoObject
-11) Button to add new toDoObject must also update listview
-12) Button must first add new object to database before retrieving and updating listview
-13) Listview needs to be spaced properly
-14) Object must identify which ID is being updated on checkbox click
+√ 8) add button to implement new add title object
+√ 9) set default toDoEdittext hint to default string ("ToDo List")
+√ 10) Create button to add new toDoObject
+√ 11) Button to add new toDoObject must also update listview
+√ 12) Button must first add new object to database before retrieving and updating listview
+√ 13) Listview needs to be spaced properly
+√ 14) Object must identify which ID is being updated on checkbox click
 15) Delete button must be sorted in order to not cause crash (null object ref from titleObject)
 16) Program must update the titleListview on start and on resume / onreturn from previous page.

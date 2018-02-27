@@ -29,11 +29,11 @@ public class ToDoPageLVAdapter extends ArrayAdapter<toDoObject>{
 
     //need to commit this
 
-    ArrayList<toDoObject> toDoObject_List = new ArrayList<>();
+    ArrayList<toDoObject> toDoObject_List;
 
     public ToDoPageLVAdapter(Context context, int resource, ArrayList<toDoObject> objects) {
         super(context, resource, objects);
-
+        this.toDoObject_List = new ArrayList<>();
         this.toDoObject_List.addAll(objects);
     }
 
@@ -80,9 +80,23 @@ public class ToDoPageLVAdapter extends ArrayAdapter<toDoObject>{
                     //create a connection to the DB
                     AppDBHandler db = new AppDBHandler(getContext());
 
-                    //delete the title object -- requires the title to be passed
-                    db.deleteToDoObject(TI);
 
+                    //find item in list
+                    for (toDoObject tempToDo : toDoObject_List)
+                    {
+                        //check if object is same
+                        if (tempToDo.getID() == TI.getID())
+                        {
+                            //remove from list
+                            toDoObject_List.remove(TI);
+                            //refresh listview
+                            //we seem to be passing an empty list...?
+                            refreshList(toDoObject_List);
+                            //delete the title object -- requires the title to be passed
+                            db.deleteToDoObject(TI);
+                            break;
+                        }
+                    }
                 }
             });
 
@@ -119,12 +133,14 @@ public class ToDoPageLVAdapter extends ArrayAdapter<toDoObject>{
         if (toDoObject_List.size() == 0)
         {
             Log.d("New Title Object:", "No Items located in listview");
+            ToDoObj =  toDoObject_List.get(position);
         }
         else
             ToDoObj =  toDoObject_List.get(position);
 
         //set tag to the button -- As to use for on click method to delete this object
         holder.toDoObject_CB.setTag(ToDoObj);
+        holder.deleteToDoObject_Btn.setTag(ToDoObj);
 
         return convertView;
     }
@@ -132,10 +148,12 @@ public class ToDoPageLVAdapter extends ArrayAdapter<toDoObject>{
     //creating a way to refresh the listview
     public void refreshList(ArrayList<toDoObject> newList)
     {
+        ArrayList<toDoObject> tempList = new ArrayList<>();
+        tempList.addAll(newList);
         //clearing current list
         this.toDoObject_List.clear();
         //adding new list passed
-        this.toDoObject_List.addAll(newList);
+        this.toDoObject_List.addAll(tempList);
         //updating the listview
         notifyDataSetChanged();
     }

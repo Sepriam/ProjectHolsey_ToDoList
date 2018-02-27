@@ -258,7 +258,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_AGENDAS;
 
         //create a temporary int to store the tagID of the toDoObject
-        int tempID = _tdO.getTitle_ID();
+        int tempID = _tdO.getID();
 
         //create a connection to the database
         SQLiteDatabase db = this.getWritableDatabase();
@@ -274,7 +274,7 @@ public class AppDBHandler extends SQLiteOpenHelper {
                 //check if the tag id is equal to the object's tag id that was passed
                 if (Integer.parseInt(cursor.getString(0)) == tempID) {
                     //if true, delete the item
-                    db.delete(TABLE_AGENDAS, KEY_TITLE_ID + " = " + tempID, null);
+                    db.delete(TABLE_AGENDAS, KEY_ID + " = " + tempID, null);
                     //Break out the loop as single item was deleted
                     break;
                 }

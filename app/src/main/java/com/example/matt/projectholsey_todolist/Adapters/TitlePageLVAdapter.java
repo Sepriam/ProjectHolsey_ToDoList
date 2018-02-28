@@ -81,6 +81,7 @@ public class TitlePageLVAdapter extends ArrayAdapter<TitleObject>{
                     //delete the title object -- requires the title to be passed
                     db.deleteTitleObject(TI.getTitle());
 
+                    //delete the item from the listview
                 }
             });
 

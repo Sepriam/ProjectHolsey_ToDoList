@@ -3,6 +3,7 @@ package com.example.matt.projectholsey_todolist.Activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,10 +19,12 @@ import java.util.ArrayList;
 
 public class ViewAgendas_SecondPage extends AppCompatActivity {
 
+    //initiate variables for widgets
     EditText titleString_ET;
     ListView toDo_LV;
     Button saveBtn;
 
+    //create a null listview adapter
     ToDoPageLVAdapter _toDoPageAdapter = null;
 
     //create an arrayList of to-do objects
@@ -61,19 +64,57 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
         //checking if the intent passed includes an object
         if (recieveIntent.getExtras() == null)
         {
-            db.addTODOtoDB();
-            titleString_ET.setHint(TITLEDEFAULTSTRINGVALUE);
-            //Call a function to return the last created object in database and add here
-            TI = db.returnLastTitleObject();
+            //report that nothing was sent across
+            Log.d("Second Page Start: ", "Nothing passed across intents");
         }
         else
         {
-            //need to add the string title to the params of this function
-            db.addTODOtoDB();
+            Bundle retrieveBundle = getIntent().getExtras();
+            TitleObject tempTitleObject = new TitleObject();
+            if(retrieveBundle!=null)
+            {
+                //get the titleObject passed from last act
+                tempTitleObject = (TitleObject) getIntent().getSerializableExtra("passBundle");
+            }
 
-            //also need to call the function to retrieve all toDoObjects associated with one passed
+            //set to the global title object of class
+            TI = tempTitleObject;
+
+            //call populate todoList Function
+            populateToDoList(TI);
         }
+    }
 
+
+    public void populateToDoList(TitleObject _titleObject)
+    {
+        //get the title's ID
+        int titleId = _titleObject.getID();
+        //create connection to db class
+        AppDBHandler db = new AppDBHandler(this);
+        //find all toDoList items that have the same titleID as the titleObject passed
+        ArrayList<toDoObject> tempList = db.returnToDoObjects(titleId);
+        //check if the array contains the contents
+        if (tempList.size() == 0)
+        {
+            //log there's currently no items with this titleID
+            Log.d("Populating list: ", "Currently no items with this titleID");
+            populateListView();
+        }
+        else
+        {
+            //log items were found
+            Log.d("Populating list: ", "Found items");
+            //pass all the items found to this activities global list
+            listOfToDoObjects.addAll(tempList);
+            //populate the listview
+            populateListView();
+        }
+    }
+
+
+    public void populateListView()
+    {
         //create the adapter with correct item(s)
         _toDoPageAdapter = new ToDoPageLVAdapter(this, R.layout.customlv_todopage, listOfToDoObjects);
 
@@ -82,7 +123,6 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
 
         //set listview's adapter
         toDo_LV.setAdapter(_toDoPageAdapter);
-
     }
 
 

@@ -423,6 +423,41 @@ public class AppDBHandler extends SQLiteOpenHelper {
     }
 
 
+    public ArrayList<TitleObject> returnTitleObjects() {
+        //select all from the table of Titles
+        String selectQuery = "SELECT * FROM " + TABLE_TITLES;
+
+        //create a connection to the database
+        SQLiteDatabase db = this.getWritableDatabase();
+        //situate the cursor on the first result of the query previously created
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        //creating a return list of titleObjects
+        ArrayList<TitleObject> returnList = new ArrayList<>();
+
+        //move to first result
+        if (cursor.moveToFirst()) {
+            do {
+                /*
+                ORDER  KEY_ID + KEY_TITLE + KEY_CREATED
+                 */
+                //creating new title object and assigning data
+                TitleObject TO = new TitleObject();
+                TO.setID(Integer.parseInt(cursor.getString(0)));
+                TO.setTitle(cursor.getString(1));
+                TO.setCreated(cursor.getString(2));
+                returnList.add(TO);
+
+
+            } while (cursor.moveToNext());
+            //moveToNext 'moves' the cursor to the next item in database until end is reached in this case
+        }
+
+        //return list of toDoObjects
+        return returnList;
+    }
+
+
     public TitleObject returnLastTitleObject()
     {
         //creating a temporary titleObject

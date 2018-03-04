@@ -66,6 +66,7 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
         {
             //report that nothing was sent across
             Log.d("Second Page Start: ", "Nothing passed across intents");
+            populateListView();
         }
         else
         {
@@ -162,14 +163,17 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
         //create new instance of db class
         AppDBHandler db = new AppDBHandler(this);
         //no content for time being
-        db.addAgendaContentstoDB(TITLEDEFAULTSTRINGVALUE, "");
+        db.addAgendaContentstoDB(TITLEDEFAULTSTRINGVALUE, " ");
         //create a new toDoObject for List
-        toDoObject newtoDoObject = new toDoObject();
+        toDoObject newtoDoObject = db.returnLastTodoObject();
         //assign to do object to last entry into database
-        newtoDoObject = db.returnLastTodoObject();
         //add toDoObject to Listview
         listOfToDoObjects.add(newtoDoObject);
         //update listViewAdapter
+        if (listOfToDoObjects == null)
+        {
+            Log.d("Error: ", "Passed a null arraylist");
+        }
         _toDoPageAdapter.refreshList(listOfToDoObjects);
 
     }

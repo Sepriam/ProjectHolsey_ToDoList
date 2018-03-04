@@ -100,6 +100,6 @@ public class ViewAllNoteTitles_StartPage extends AppCompatActivity {
         //adding the bundle to the intent
         i.putExtra("passBundle", TI);
         //starting the next activity
-        startActivityForResult(i, REQUEST_CODE);
+        startActivity(i);
     }
 }

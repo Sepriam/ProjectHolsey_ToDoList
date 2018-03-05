@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.matt.projectholsey_todolist.Adapters.TitlePageLVAdapter;
+import com.example.matt.projectholsey_todolist.Adapters.ToDoPageLVAdapter;
 import com.example.matt.projectholsey_todolist.Objects.TitleObject;
 import com.example.matt.projectholsey_todolist.R;
 import com.example.matt.projectholsey_todolist.Database.*;
@@ -21,7 +23,11 @@ public class ViewAllNoteTitles_StartPage extends AppCompatActivity {
     //request code to be passed to second act
     public static int REQUEST_CODE = 1;
 
+    //array for titleObjects
     ArrayList<TitleObject> titleList = new ArrayList<>();
+
+    //empty titlePage adapter
+    TitlePageLVAdapter titleAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,26 +65,17 @@ public class ViewAllNoteTitles_StartPage extends AppCompatActivity {
 
         //instanciate the adapter for the listview
 
+        //create new titlePage adapter with current titleObjectList
+        titleAdapter = new TitlePageLVAdapter(this, R.layout.customlv_titlepage, titleList);
+
+        //set widget to variable
+        lv = (ListView) findViewById(R.id.TitlePage_Lv);
+
+        //set listview's adapter
+        lv.setAdapter(titleAdapter);
+
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        //checking request code is correct
-        if (requestCode == REQUEST_CODE)
-        {
-            //checking if result code is correct
-            if(resultCode == RESULT_OK)
-            {
-
-                //RECIEVING A TITLEOBJECT
-
-
-                //code to happen should activity return
-
-            }
-        }
-    }
 
     public void createNewToDoObject_BtnClick(View view) {
         //create a new titleObject

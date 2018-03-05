@@ -80,6 +80,8 @@ public class ToDoPageLVAdapter extends ArrayAdapter<toDoObject>{
                     //create a connection to the DB
                     AppDBHandler db = new AppDBHandler(getContext());
 
+                    int tempTitleID = TI.getTitle_ID();
+
 
                     //find item in list
                     for (toDoObject tempToDo : toDoObject_List)
@@ -89,11 +91,10 @@ public class ToDoPageLVAdapter extends ArrayAdapter<toDoObject>{
                         {
                             //remove from list
                             toDoObject_List.remove(TI);
-                            //refresh listview
-                            //we seem to be passing an empty list...?
-                            refreshList(toDoObject_List);
-                            //delete the title object -- requires the title to be passed
+                            //delete the toDoObject object -- requires the title to be passed
                             db.deleteToDoObject(TI);
+                            //refresh listview
+                            refreshList(tempTitleID);
                             break;
                         }
                     }
@@ -156,5 +157,20 @@ public class ToDoPageLVAdapter extends ArrayAdapter<toDoObject>{
         this.toDoObject_List.addAll(tempList);
         //updating the listview
         notifyDataSetChanged();
+    }
+
+
+    public void refreshList(int _tempTitleID)
+    {
+        //connection to db Class
+        AppDBHandler db = new AppDBHandler(getContext());
+        //use title ID to get list of all associated toDoObjects
+        ArrayList<toDoObject> newToDoList = db.returnToDoObjects(_tempTitleID);
+        //refresh the dataSet with the correct list
+        this.toDoObject_List.clear();
+        this.toDoObject_List.addAll(newToDoList);
+        notifyDataSetChanged();
+
+
     }
 }

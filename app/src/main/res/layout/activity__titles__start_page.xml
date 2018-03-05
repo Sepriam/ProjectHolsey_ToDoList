@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.matt.projectholsey_todolist.Activities.ViewAllNoteTitles_StartPage">
 
     <Button
@@ -15,15 +16,11 @@
         android:hint="Add New Item"
         android:onClick="createNewToDoObject_BtnClick"/>
 
-    <ScrollView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content">
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/TitlePage_Lv"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/TitlePage_Lv"/>
 
-    </ScrollView>
 
 </LinearLayout>

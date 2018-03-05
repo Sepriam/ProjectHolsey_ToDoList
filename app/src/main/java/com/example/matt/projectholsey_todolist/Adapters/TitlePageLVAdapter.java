@@ -31,7 +31,15 @@ public class TitlePageLVAdapter extends ArrayAdapter<TitleObject>{
 
     public TitlePageLVAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<TitleObject> objects) {
         super(context, resource, objects);
-        this._titleObjects.addAll(objects);
+        if (objects.size() == 0)
+        {
+            Log.d("TitlePage:", " No objects recieved");
+        }
+        else
+        {
+            this._titleObjects = new ArrayList<>();
+            this._titleObjects.addAll(objects);
+        }
 
     }
 

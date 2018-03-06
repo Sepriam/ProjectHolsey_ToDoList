@@ -3,7 +3,9 @@ package com.example.matt.projectholsey_todolist.Activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -73,6 +75,23 @@ public class ViewAllNoteTitles_StartPage extends AppCompatActivity {
 
         //set listview's adapter
         lv.setAdapter(titleAdapter);
+
+        //create and on item clicked listener
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //log that the listview is being clicked
+                Log.d("Title Page LV Click: ", "Item in Listview was clicked");
+                //create a new intent
+                Intent startNewAct = new Intent(getApplicationContext(), ViewAgendas_SecondPage.class);
+                //retrieve item being clicked in list
+                TitleObject titleObjectToPass = titleList.get(i);
+                //pass item into intent
+                startNewAct.putExtra("passBundle", titleObjectToPass);
+                //start new intent
+                startActivity(startNewAct);
+            }
+        });
 
     }
 

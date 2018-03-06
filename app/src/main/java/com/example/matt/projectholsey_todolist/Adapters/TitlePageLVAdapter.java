@@ -74,24 +74,7 @@ public class TitlePageLVAdapter extends ArrayAdapter<TitleObject>{
             //set the tag of the convert view as to grab the object again later
             convertView.setTag(holder);
 
-            holder.deleteTitleObjectBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //use the view passed  -- ie the button being clicked
-                    ImageButton IB = (ImageButton) view;
 
-                    //create a new titleObject and assign it to the one saved in ImageButton tag
-                    TitleObject TI = (TitleObject) IB.getTag();
-
-                    //create a connection to the DB
-                    AppDBHandler db = new AppDBHandler(getContext());
-
-                    //delete the title object -- requires the title to be passed
-                    db.deleteTitleObject(TI.getTitle());
-
-                    //delete the item from the listview
-                }
-            });
 
         }
         else
@@ -99,8 +82,32 @@ public class TitlePageLVAdapter extends ArrayAdapter<TitleObject>{
             holder = (ViewHolder) convertView.getTag();
         }
 
+        //creating the onClickListener
+        holder.deleteTitleObjectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //use the view passed  -- ie the button being clicked
+                ImageButton IB = (ImageButton) view;
+
+                //create a new titleObject and assign it to the one saved in ImageButton tag
+                TitleObject TI = (TitleObject) IB.getTag();
+
+                //create a connection to the DB
+                AppDBHandler db = new AppDBHandler(getContext());
+
+                //delete the title object -- requires the title to be passed
+                db.deleteTitleObject(TI.getTitle());
+
+                //delete the item from the listview
+            }
+        });
+
+
+
+
         //selecting the object from listview
         TitleObject titleObject = _titleObjects.get(position);
+
 
         if (titleObject.getTitle() == "")
         {

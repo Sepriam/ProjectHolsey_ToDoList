@@ -1,6 +1,7 @@
 package com.example.matt.projectholsey_todolist.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,11 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.matt.projectholsey_todolist.Activities.ViewAgendas_SecondPage;
 import com.example.matt.projectholsey_todolist.Database.AppDBHandler;
 import com.example.matt.projectholsey_todolist.Objects.TitleObject;
 import com.example.matt.projectholsey_todolist.R;
@@ -27,23 +30,34 @@ import java.util.List;
 
 public class TitlePageLVAdapter extends ArrayAdapter<TitleObject>{
 
-    public ArrayList<TitleObject> _titleObjects;
+    //set context;
+    private Context context;
+
+    //new arraylist for the titleObjects
+    private ArrayList<TitleObject> _titleObjects;
 
     public TitlePageLVAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<TitleObject> objects) {
         super(context, resource, objects);
         if (objects.size() == 0)
         {
+            //log if no items currently in list
             Log.d("TitlePage:", " No objects recieved");
+            //assign arraylist
+            this._titleObjects = new ArrayList<>();
         }
         else
         {
+            //assign arrayList
             this._titleObjects = new ArrayList<>();
+            //add all objects from the arraylist passed to adapter
             this._titleObjects.addAll(objects);
         }
 
     }
 
+    //internal viewholder class
     public class ViewHolder {
+        //assigning the widgets
         TextView displayTitleTV;
         TextView displayDataCreatedTV;
         ImageButton deleteTitleObjectBtn;
@@ -69,21 +83,20 @@ public class TitlePageLVAdapter extends ArrayAdapter<TitleObject>{
             holder = new ViewHolder();
             holder.displayTitleTV = convertView.findViewById(R.id.TitleString_Tv);
             holder.displayDataCreatedTV = convertView.findViewById(R.id.DateCreated_Tv);
-            holder.deleteTitleObjectBtn = convertView.findViewById(R.id.DeleteTitle_Btn);
+            // holder.deleteTitleObjectBtn = convertView.findViewById(R.id.DeleteTitle_Btn);
 
             //set the tag of the convert view as to grab the object again later
             convertView.setTag(holder);
-
-
-
         }
         else
         {
+            //if the view is null then set the current view to the one assigned to the current element
             holder = (ViewHolder) convertView.getTag();
         }
 
+
         //creating the onClickListener
-        holder.deleteTitleObjectBtn.setOnClickListener(new View.OnClickListener() {
+        /*holder.deleteTitleObjectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //use the view passed  -- ie the button being clicked
@@ -100,21 +113,19 @@ public class TitlePageLVAdapter extends ArrayAdapter<TitleObject>{
 
                 //delete the item from the listview
             }
-        });
-
-
-
+        });*/
 
         //selecting the object from listview
         TitleObject titleObject = _titleObjects.get(position);
 
-
+        //checking if the there's a title associated with the object
         if (titleObject.getTitle() == "")
         {
             //log an error if the title object has an empty string
             Log.d("Error:", "Title object had no title string");
         }
-        else {
+        else
+        {
             //if here then it displays properly
             holder.displayTitleTV.setText(titleObject.getTitle());
         }
@@ -123,7 +134,10 @@ public class TitlePageLVAdapter extends ArrayAdapter<TitleObject>{
         holder.displayDataCreatedTV.setText(titleObject.getCreated());
 
         //set tag to the button -- As to use for on click method to delete this object
-        holder.deleteTitleObjectBtn.setTag(titleObject);
+       // holder.deleteTitleObjectBtn.setTag(titleObject);
+
+
+
 
         return convertView;
     }

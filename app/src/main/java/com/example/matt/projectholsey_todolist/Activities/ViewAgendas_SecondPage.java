@@ -59,10 +59,12 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
         AppDBHandler db = new AppDBHandler(this);
 
         //get the extra passed from last one
-        Intent recieveIntent = new Intent();
+        Intent receiveIntent = new Intent();
+
+
 
         //checking if the intent passed includes an object
-        if (recieveIntent.getExtras() == null)
+        if (receiveIntent.getExtras() == null)
         {
             //report that nothing was sent across
             Log.d("Second Page Start: ", "Nothing passed across intents");
@@ -178,3 +180,14 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
 
     }
 }
+
+
+/*
+        //TitleObject newTempTitleObject = (TitleObject) receiveIntent.getSerializableExtra("passBundle");
+
+        //set to the global title object of class
+        TI = newTempTitleObject;
+
+        //call populate todoList Function
+        populateToDoList(TI);
+ */

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,8 +23,6 @@ public class ViewAllNoteTitles_StartPage extends AppCompatActivity {
     //create listview object
     private ListView lv;
 
-    //request code to be passed to second act
-    public static int REQUEST_CODE = 1;
 
     //array for titleObjects
     ArrayList<TitleObject> titleList = new ArrayList<>();
@@ -65,31 +64,20 @@ public class ViewAllNoteTitles_StartPage extends AppCompatActivity {
         //load items into the list
         loadItemsIntoList();
 
-        //instanciate the adapter for the listview
-
         //create new titlePage adapter with current titleObjectList
-        titleAdapter = new TitlePageLVAdapter(this, R.layout.customlv_titlepage, titleList);
-
-        //set widget to variable
-        lv = (ListView) findViewById(R.id.TitlePage_Lv);
+        ListAdapter newAdapter = new TitlePageLVAdapter(this,
+                R.layout.customlv_titlepage, titleList);
 
         //set listview's adapter
-        lv.setAdapter(titleAdapter);
+        lv.setAdapter(newAdapter);
 
-        //create and on item clicked listener
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //log that the listview is being clicked
-                Log.d("Title Page LV Click: ", "Item in Listview was clicked");
-                //create a new intent
-                Intent startNewAct = new Intent(getApplicationContext(), ViewAgendas_SecondPage.class);
-                //retrieve item being clicked in list
-                TitleObject titleObjectToPass = titleList.get(i);
-                //pass item into intent
-                startNewAct.putExtra("passBundle", titleObjectToPass);
-                //start new intent
-                startActivity(startNewAct);
+                Intent intent = new Intent(getBaseContext(), ViewAgendas_SecondPage.class);
+                TitleObject passtitleObject = titleList.get(i);
+                intent.putExtra("passBundle", passtitleObject);
+                startActivity(intent);
             }
         });
 

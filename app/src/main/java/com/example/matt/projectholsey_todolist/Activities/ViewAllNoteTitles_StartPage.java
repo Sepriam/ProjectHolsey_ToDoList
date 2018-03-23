@@ -42,6 +42,9 @@ public class ViewAllNoteTitles_StartPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__titles__start_page);
 
+        //instanciate the listview
+        lv = (ListView)findViewById(R.id.TitlePage_Lv);
+
         InitiateWidgets();
 
     }
@@ -65,8 +68,7 @@ public class ViewAllNoteTitles_StartPage extends AppCompatActivity {
 
     private void InitiateWidgets()
     {
-        //instanciate the listview
-        lv = (ListView)findViewById(R.id.TitlePage_Lv);
+
 
         //load items into the list
         loadItemsIntoList();
@@ -144,5 +146,13 @@ public class ViewAllNoteTitles_StartPage extends AppCompatActivity {
 
         //starting the next activity
         startActivity(i);
+    }
+
+
+    @Override
+    protected void onPostResume() {
+        titleList.clear();
+        InitiateWidgets();
+        super.onPostResume();
     }
 }

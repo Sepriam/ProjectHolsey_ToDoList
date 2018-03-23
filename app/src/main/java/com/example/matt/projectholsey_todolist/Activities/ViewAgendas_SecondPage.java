@@ -42,6 +42,8 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todoobjects__second_page);
 
+        TI = new TitleObject();
+
         initiateWidgets();
     }
 
@@ -62,39 +64,28 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
         //get the extra passed from last one
         Intent receiveIntent = new Intent();
 
-
-
-        //checking if the intent passed includes an object
-        if (receiveIntent.getExtras() == null)
+        Bundle retrieveBundle = getIntent().getExtras();
+        TitleObject tempTitleObject = new TitleObject();
+        if(retrieveBundle!=null)
         {
-
-            //assigning titleobject into the last created titleobject in database
-            TI = db.returnLastTitleObject();
-
-            //setting textview to the title passed
-            titleString_TV.setText(TI.getTitle());
-
-            populateListView();
-        }
-        else
-        {
-            Bundle retrieveBundle = getIntent().getExtras();
-            TitleObject tempTitleObject = new TitleObject();
-            if(retrieveBundle!=null)
-            {
-                //get the titleObject passed from last act
-                tempTitleObject = (TitleObject) getIntent().getSerializableExtra("passBundle");
-            }
+            //get the titleObject passed from last act
+            tempTitleObject = (TitleObject) getIntent().getSerializableExtra("passBundle");
 
             //set to the global title object of class
             TI = tempTitleObject;
-
-            //setting textview to title passed
-            titleString_TV.setText(TI.getTitle());
-
-            //call populate todoList Function
-            populateToDoList(TI);
         }
+        else
+        {
+            //assigning titleobject into the last created titleobject in database
+            TI = db.returnLastTitleObject();
+        }
+
+        //call populate todoList Function
+        populateToDoList(TI);
+
+        //setting textview to title passed
+        titleString_TV.setText(TI.getTitle());
+
     }
 
 

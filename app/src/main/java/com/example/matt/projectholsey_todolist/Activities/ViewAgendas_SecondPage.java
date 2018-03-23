@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.matt.projectholsey_todolist.Adapters.ToDoPageLVAdapter;
 import com.example.matt.projectholsey_todolist.Database.AppDBHandler;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 public class ViewAgendas_SecondPage extends AppCompatActivity {
 
     //initiate variables for widgets
-    EditText titleString_ET;
+    TextView titleString_TV;
     ListView toDo_LV;
     Button saveBtn;
 
@@ -48,7 +49,7 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
     private void initiateWidgets()
     {
         //instanciate the edittext
-        titleString_ET = (EditText)findViewById(R.id.TitleInput_ET);
+        titleString_TV = (TextView) findViewById(R.id.TitleInput_TV);
 
         //instanciate save button
         saveBtn = (Button)findViewById(R.id.SaveToDo_Btn);
@@ -66,8 +67,13 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
         //checking if the intent passed includes an object
         if (receiveIntent.getExtras() == null)
         {
-            //report that nothing was sent across
-            Log.d("Second Page Start: ", "Nothing passed across intents");
+
+            //assigning titleobject into the last created titleobject in database
+            TI = db.returnLastTitleObject();
+
+            //setting textview to the title passed
+            titleString_TV.setText(TI.getTitle());
+
             populateListView();
         }
         else
@@ -82,6 +88,9 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
 
             //set to the global title object of class
             TI = tempTitleObject;
+
+            //setting textview to title passed
+            titleString_TV.setText(TI.getTitle());
 
             //call populate todoList Function
             populateToDoList(TI);
@@ -134,10 +143,6 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
         //create connection to db class
         AppDBHandler db = new AppDBHandler(this);
 
-        //string of the current item stored as title
-        String titleString;
-        //assigning this string to the string currently stored in title edittext
-        titleString = titleString_ET.toString();
 
         //cycle through all objects in list and add them to the database.
         for (toDoObject a : listOfToDoObjects)
@@ -145,7 +150,7 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
             //NEED TO RESTRICT THIS SO IT DOESN'T REPEATEDLY ADD THE SAME ITEMS TO DATABASE
 
             //add every object to the toDoList
-            db.addAgendaContentstoDB(titleString, a.getItemToDo());
+            db.addAgendaContentstoDB(TI.getTitle(), a.getItemToDo());
         }
         //save the item
 

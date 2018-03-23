@@ -1,11 +1,16 @@
 package com.example.matt.projectholsey_todolist.Activities;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -22,6 +27,8 @@ public class ViewAllNoteTitles_StartPage extends AppCompatActivity {
 
     //create listview object
     private ListView lv;
+
+    String newToDoListName = "";
 
 
     //array for titleObjects
@@ -71,6 +78,7 @@ public class ViewAllNoteTitles_StartPage extends AppCompatActivity {
         //set listview's adapter
         lv.setAdapter(newAdapter);
 
+        //setting an onclicklistener for the listview
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -80,29 +88,60 @@ public class ViewAllNoteTitles_StartPage extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
 
-    public void createNewToDoObject_BtnClick(View view) {
+    public void createNewToDoObject_BtnClick(View view)
+    {
+        //calling the prompt function to declare a new name for the titleObject
+        newNamePrompt();
+    }
+
+
+    public void newNamePrompt()
+    {
+        //creating new view
+        View view = (LayoutInflater.from(ViewAllNoteTitles_StartPage.this)).inflate(R.layout.new_naming_prompt, null);
+
+        //creating a new dialog window for prompot
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(ViewAllNoteTitles_StartPage.this);
+        alertBuilder.setView(view);
+
+        //assiging editText variable to widget
+        final EditText userInput = (EditText) view.findViewById(R.id.newNamePromptET);
+
+        //setting an onclick method for the positiveAction button
+        alertBuilder.setCancelable(true).setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //positive action means it will assign string value to global value
+                newToDoListName = userInput.getText().toString();
+
+                //call the function to start net activity
+                createNewObject_Act();
+            }
+        });
+
+        Dialog dialog = alertBuilder.create();
+        dialog.show();
+
+
+
+    }
+
+    public void createNewObject_Act()
+    {
+
         //create a new titleObject
         //pass the titleObject across the class
         AppDBHandler db = new AppDBHandler(this);
+
         //creating a new title object in table
-        db.addTODOtoDB();
-        //creating a new title object
-        TitleObject TI = new TitleObject();
-        //assigning titleobject into the last created titleobject in database
-        TI = db.returnLastTitleObject();
+        db.addTODOtoDB(newToDoListName);
 
         //starting new activity for the user to select muscle groups
         Intent i = new Intent(this, ViewAgendas_SecondPage.class);
-        /*//Creating a new bundle to pass object across activities
-        Bundle passBundle = new Bundle();
-        //adding the object to the bundle
-        passBundle.putSerializable("titleObject", TI);*/
-        //adding the bundle to the intent
-        i.putExtra("passBundle", TI);
+
         //starting the next activity
         startActivity(i);
     }

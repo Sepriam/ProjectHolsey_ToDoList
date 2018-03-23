@@ -26,7 +26,7 @@ import com.example.matt.projectholsey_todolist.Objects.toDoObject;
 public class AppDBHandler extends SQLiteOpenHelper {
 
     //Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     //Default value for titleObject's String
     private final String TITLEDEFAULTSTRINGVALUE = "ToDo List";

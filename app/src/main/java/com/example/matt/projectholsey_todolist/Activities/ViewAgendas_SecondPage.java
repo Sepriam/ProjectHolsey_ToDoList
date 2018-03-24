@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.matt.projectholsey_todolist.Adapters.ToDoPageLVAdapter;
 import com.example.matt.projectholsey_todolist.Database.AppDBHandler;
@@ -31,9 +32,6 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
     //create an arrayList of to-do objects
     ArrayList<toDoObject> listOfToDoObjects =  new ArrayList<>();
 
-    //string of the currentTitleObject
-    private final String TITLEDEFAULTSTRINGVALUE = "ToDo List";
-
     //Current Title Object
     TitleObject TI = new TitleObject();
 
@@ -47,7 +45,7 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
         initiateWidgets();
     }
 
-
+    //function to assign variables to their respective widgets
     private void initiateWidgets()
     {
         //instanciate the edittext
@@ -56,29 +54,8 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
         //instanciate save button
         saveBtn = (Button)findViewById(R.id.SaveToDo_Btn);
 
-        //get list of toDoObjects? -- it's empty to begin with..
-
-        //initiating connection with db
-        AppDBHandler db = new AppDBHandler(this);
-
-        //get the extra passed from last one
-        Intent receiveIntent = new Intent();
-
-        Bundle retrieveBundle = getIntent().getExtras();
-        TitleObject tempTitleObject = new TitleObject();
-        if(retrieveBundle!=null)
-        {
-            //get the titleObject passed from last act
-            tempTitleObject = (TitleObject) getIntent().getSerializableExtra("passBundle");
-
-            //set to the global title object of class
-            TI = tempTitleObject;
-        }
-        else
-        {
-            //assigning titleobject into the last created titleobject in database
-            TI = db.returnLastTitleObject();
-        }
+        //call function to retrieve the current title object
+        retrieveCurrentTitleObject();
 
         //call populate todoList Function
         populateToDoList(TI);
@@ -86,9 +63,14 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
         //setting textview to title passed
         titleString_TV.setText(TI.getTitle());
 
+        Toast.makeText(getApplicationContext(), "Current title ID = " + TI.getID(), Toast.LENGTH_SHORT).show();
     }
 
 
+    /*
+    function to grab the correct toDoObjects associated with the current titleObject
+    Also calls the populateList() function
+     */
     public void populateToDoList(TitleObject _titleObject)
     {
         //get the title's ID
@@ -113,9 +95,12 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
             //populate the listview
             populateListView();
         }
+        //close db
+        db.close();
     }
 
 
+    //function to initiate and populate the activity's listview
     public void populateListView()
     {
         //create the adapter with correct item(s)
@@ -129,30 +114,66 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
     }
 
 
+    /*
+    function to retrieve the current title object
+    this can be from the intent passed or from last object create in database
+     */
+    public void retrieveCurrentTitleObject()
+    {
+        //initiating connection with db
+        AppDBHandler db = new AppDBHandler(this);
+
+        Bundle retrieveBundle = getIntent().getExtras();
+        TitleObject tempTitleObject = new TitleObject();
+        if(retrieveBundle!=null)
+        {
+            //get the titleObject passed from last act
+            tempTitleObject = (TitleObject) getIntent().getSerializableExtra("passBundle");
+
+            //set to the global title object of class
+            TI = tempTitleObject;
+        }
+        else
+        {
+            //assigning titleobject into the last created titleobject in database
+            TI = db.returnLastTitleObject();
+        }
+
+        //close db
+        db.close();
+    }
+
+
+
+    //button functionality to save the toDoList
     public void saveToDo_BtnClick(View view)
     {
         //create connection to db class
         AppDBHandler db = new AppDBHandler(this);
 
+        //delete all the current toDoObjects with titleID in db
+        db.deleteAgendaContentObjectsWithTID(TI.getID());
 
         //cycle through all objects in list and add them to the database.
         for (toDoObject a : listOfToDoObjects)
         {
-            //NEED TO RESTRICT THIS SO IT DOESN'T REPEATEDLY ADD THE SAME ITEMS TO DATABASE
+            //creating a string to store the state of the object
+            String tempState = String.valueOf(a.isComplete());
 
             //add every object to the toDoList
-            db.addAgendaContentstoDB(TI.getTitle(), a.getItemToDo());
+            //doesnt add because there's no item assigned to the to-do.......
+            //maybe ontextUpdated??
+            db.addAgendaContentstoDB(TI.getID(), a.getItemToDo(), tempState);
         }
-        //save the item
 
-        Intent returnResult = new Intent();
-        //pass back TitleObject with its new string
-        returnResult.putExtra("_result", TI);
-        setResult(RESULT_OK,returnResult);
+        //close conn to db
+        db.close();
+
+        //finish the current activity
         finish();
     }
 
-
+    //button functionality to add new item to ToDoList
     public void addNewToDo_BtnClick(View view)
     {
         //need to add new todoObject to database
@@ -160,19 +181,27 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
 
         //create new instance of db class
         AppDBHandler db = new AppDBHandler(this);
+
         //no content for time being
-        db.addAgendaContentstoDB(TITLEDEFAULTSTRINGVALUE, " ");
+        db.addAgendaContentstoDB(TI.getID(), " ", "false");
+
         //create a new toDoObject for List
         toDoObject newtoDoObject = db.returnLastTodoObject();
         //assign to do object to last entry into database
+
         //add toDoObject to Listview
         listOfToDoObjects.add(newtoDoObject);
+
         //update listViewAdapter
         if (listOfToDoObjects == null)
         {
             Log.d("Error: ", "Passed a null arraylist");
         }
+
+        //refreshes the current list
         _toDoPageAdapter.refreshList(listOfToDoObjects);
+
+        db.close();
 
     }
 }

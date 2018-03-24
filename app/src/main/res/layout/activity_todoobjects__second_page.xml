@@ -14,36 +14,46 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:id="@+id/TitleInput_TV"
             android:hint="title"
-            android:layout_gravity="center|top"/>
+            android:layout_gravity="center|top"
+            android:layout_weight="0.9"/>
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:id="@+id/AddNewToDoObject_Btn"
             android:hint="New Item"
-            android:onClick="addNewToDo_BtnClick"/>
+            android:onClick="addNewToDo_BtnClick"
 
-
+            android:layout_weight="0.9"/>
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ToDoPage_LV"/>
+            android:layout_height="match_parent"
 
+            android:id="@+id/ToDoPage_LV"
 
+            android:layout_weight="0.2"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:layout_below="@+id/ToDoPage_LV"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/SaveToDo_Btn"
+            android:onClick="saveToDo_BtnClick"
+            android:text="Save"
+
+            android:layout_weight="0.9"/>
 
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/SaveToDo_Btn"
-        android:onClick="saveToDo_BtnClick"
-        android:text="Save"/>
+
+
+
 
 </RelativeLayout>

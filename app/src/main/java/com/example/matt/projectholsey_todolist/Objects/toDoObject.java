@@ -16,27 +16,15 @@ public class toDoObject {
     //empty constructor
     public toDoObject(){}
 
-    //constructor (without  Title_ID)
-    public toDoObject(boolean isComplete, String itemToDo) {
-        IsComplete = isComplete;
-        ItemToDo = itemToDo;
-    }
 
-    //constructor (with tagID)
-    public toDoObject(int Title_ID, boolean isComplete, String itemToDo) {
-        this.Title_ID = Title_ID;
-        IsComplete = isComplete;
-        ItemToDo = itemToDo;
-    }
 
-    //constructor with all
-    public toDoObject(int ID, int Title_ID, boolean isComplete, String itemToDo) {
+    //constructor with all params
+    public toDoObject(int ID, int title_ID, boolean isComplete, String itemToDo) {
         this.ID = ID;
-        this.Title_ID = Title_ID;
+        Title_ID = title_ID;
         IsComplete = isComplete;
         ItemToDo = itemToDo;
     }
-
 
     //get and set methods for variables in class
     public boolean isComplete() {

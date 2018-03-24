@@ -27,20 +27,21 @@ import java.util.List;
 
 public class ToDoPageLVAdapter extends ArrayAdapter<toDoObject>{
 
-    //need to commit this
-
+    //arraylist of todoobjects
     ArrayList<toDoObject> toDoObject_List;
 
+    //constructor for class that assigns the passed array list to the global one just created
     public ToDoPageLVAdapter(Context context, int resource, ArrayList<toDoObject> objects) {
         super(context, resource, objects);
         this.toDoObject_List = new ArrayList<>();
         this.toDoObject_List.addAll(objects);
     }
 
+    //internal viewholder class
     public class ViewHolder {
         //class to hold views of the different widgets of the custom listview element
         CheckBox toDoObject_CB;
-        EditText toDoObject_ET;
+        TextView toDoObject_TV;
         ImageButton deleteToDoObject_Btn;
     }
 
@@ -61,13 +62,16 @@ public class ToDoPageLVAdapter extends ArrayAdapter<toDoObject>{
 
             //creating a new viewholder
             holder = new ViewHolder();
-            holder.toDoObject_ET = convertView.findViewById(R.id.ToDo_ET);
+
+            //assigning the viewholder the current widgets
             holder.toDoObject_CB = convertView.findViewById(R.id.ToDo_CB);
+            holder.toDoObject_TV = convertView.findViewById(R.id.ToDo_TV);
             holder.deleteToDoObject_Btn = convertView.findViewById(R.id.DeleteToDo_Btn);
 
             //set the tag of the convert view as to grab the object again later
             convertView.setTag(holder);
 
+            //creating an onclicklistener for the btn
             holder.deleteToDoObject_Btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -116,11 +120,6 @@ public class ToDoPageLVAdapter extends ArrayAdapter<toDoObject>{
                     Toast.makeText(getContext(), "TODOOBJECT ID : " + TDO.getID() + ", IS NOW " + TDO.isComplete(), Toast.LENGTH_SHORT).show();
                 }
             });
-
-
-
-            // need to create a new checkbox listener to change the value of the boolean for current object
-
         }
         else
         {
@@ -133,18 +132,26 @@ public class ToDoPageLVAdapter extends ArrayAdapter<toDoObject>{
         //selecting the object from listview
         if (toDoObject_List.size() == 0)
         {
+            //if there's no items in the listview, log there's no current items (new TitleObject was ccreated)
             Log.d("New Title Object:", "No Items located in listview");
             ToDoObj =  toDoObject_List.get(position);
         }
         else
             ToDoObj =  toDoObject_List.get(position);
 
+        //if statement to check whether there's something contained in the toDoObject's content string
+        if(!ToDoObj.getItemToDo().equals(""))
+            holder.toDoObject_TV.setText(ToDoObj.getItemToDo()); //if true, assign this value to the textview
+
         //set tag to the button -- As to use for on click method to delete this object
         holder.toDoObject_CB.setTag(ToDoObj);
         holder.deleteToDoObject_Btn.setTag(ToDoObj);
 
+        //return the view created
         return convertView;
     }
+
+
 
     //creating a way to refresh the listview
     public void refreshList(ArrayList<toDoObject> newList)

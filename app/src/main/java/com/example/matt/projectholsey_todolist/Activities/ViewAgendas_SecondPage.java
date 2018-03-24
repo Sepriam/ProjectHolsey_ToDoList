@@ -1,9 +1,13 @@
 package com.example.matt.projectholsey_todolist.Activities;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,8 +33,11 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
     //create a null listview adapter
     ToDoPageLVAdapter _toDoPageAdapter = null;
 
+    //string to carry a temp global string for creating new object
+    String tempToDoObjectContent = "";
+
     //create an arrayList of to-do objects
-    ArrayList<toDoObject> listOfToDoObjects =  new ArrayList<>();
+    ArrayList<toDoObject> listOfToDoObjects = new ArrayList<>();
 
     //Current Title Object
     TitleObject TI = new TitleObject();
@@ -46,13 +53,12 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
     }
 
     //function to assign variables to their respective widgets
-    private void initiateWidgets()
-    {
+    private void initiateWidgets() {
         //instanciate the edittext
         titleString_TV = (TextView) findViewById(R.id.TitleInput_TV);
 
         //instanciate save button
-        saveBtn = (Button)findViewById(R.id.SaveToDo_Btn);
+        saveBtn = (Button) findViewById(R.id.SaveToDo_Btn);
 
         //call function to retrieve the current title object
         retrieveCurrentTitleObject();
@@ -71,8 +77,7 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
     function to grab the correct toDoObjects associated with the current titleObject
     Also calls the populateList() function
      */
-    public void populateToDoList(TitleObject _titleObject)
-    {
+    public void populateToDoList(TitleObject _titleObject) {
         //get the title's ID
         int titleId = _titleObject.getID();
         //create connection to db class
@@ -80,14 +85,11 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
         //find all toDoList items that have the same titleID as the titleObject passed
         ArrayList<toDoObject> tempList = db.returnToDoObjects(titleId);
         //check if the array contains the contents
-        if (tempList.size() == 0)
-        {
+        if (tempList.size() == 0) {
             //log there's currently no items with this titleID
             Log.d("Populating list: ", "Currently no items with this titleID");
             populateListView();
-        }
-        else
-        {
+        } else {
             //log items were found
             Log.d("Populating list: ", "Found items");
             //pass all the items found to this activities global list
@@ -101,8 +103,7 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
 
 
     //function to initiate and populate the activity's listview
-    public void populateListView()
-    {
+    public void populateListView() {
         //create the adapter with correct item(s)
         _toDoPageAdapter = new ToDoPageLVAdapter(this, R.layout.customlv_todopage, listOfToDoObjects);
 
@@ -118,23 +119,19 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
     function to retrieve the current title object
     this can be from the intent passed or from last object create in database
      */
-    public void retrieveCurrentTitleObject()
-    {
+    public void retrieveCurrentTitleObject() {
         //initiating connection with db
         AppDBHandler db = new AppDBHandler(this);
 
         Bundle retrieveBundle = getIntent().getExtras();
         TitleObject tempTitleObject = new TitleObject();
-        if(retrieveBundle!=null)
-        {
+        if (retrieveBundle != null) {
             //get the titleObject passed from last act
             tempTitleObject = (TitleObject) getIntent().getSerializableExtra("passBundle");
 
             //set to the global title object of class
             TI = tempTitleObject;
-        }
-        else
-        {
+        } else {
             //assigning titleobject into the last created titleobject in database
             TI = db.returnLastTitleObject();
         }
@@ -144,10 +141,8 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
     }
 
 
-
     //button functionality to save the toDoList
-    public void saveToDo_BtnClick(View view)
-    {
+    public void saveToDo_BtnClick(View view) {
         //create connection to db class
         AppDBHandler db = new AppDBHandler(this);
 
@@ -155,8 +150,7 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
         db.deleteAgendaContentObjectsWithTID(TI.getID());
 
         //cycle through all objects in list and add them to the database.
-        for (toDoObject a : listOfToDoObjects)
-        {
+        for (toDoObject a : listOfToDoObjects) {
             //creating a string to store the state of the object
             String tempState = String.valueOf(a.isComplete());
 
@@ -174,34 +168,67 @@ public class ViewAgendas_SecondPage extends AppCompatActivity {
     }
 
     //button functionality to add new item to ToDoList
-    public void addNewToDo_BtnClick(View view)
-    {
-        //need to add new todoObject to database
-        //then load that object into listview
+    public void addNewToDo_BtnClick(View view) {
 
-        //create new instance of db class
-        AppDBHandler db = new AppDBHandler(this);
 
         //no content for time being
-        db.addAgendaContentstoDB(TI.getID(), " ", "false");
+        newNamePrompt();
 
-        //create a new toDoObject for List
-        toDoObject newtoDoObject = db.returnLastTodoObject();
-        //assign to do object to last entry into database
 
-        //add toDoObject to Listview
-        listOfToDoObjects.add(newtoDoObject);
+    }
 
-        //update listViewAdapter
-        if (listOfToDoObjects == null)
-        {
-            Log.d("Error: ", "Passed a null arraylist");
-        }
+    public void newNamePrompt() {
 
-        //refreshes the current list
-        _toDoPageAdapter.refreshList(listOfToDoObjects);
 
-        db.close();
+        //creating new view
+        View view = (LayoutInflater.from(ViewAgendas_SecondPage.this)).inflate(R.layout.new_naming_prompt, null);
+
+        //creating a new dialog window for prompot
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(ViewAgendas_SecondPage.this);
+        alertBuilder.setView(view);
+
+        //assiging editText variable to widget
+        final EditText userInput = (EditText) view.findViewById(R.id.newNamePromptET);
+
+        //setting an onclick method for the positiveAction button
+        alertBuilder.setCancelable(true).setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //need to add new todoObject to database
+                //then load that object into listview
+
+                //create new instance of db class
+                AppDBHandler db = new AppDBHandler(getApplicationContext());
+
+                //positive action means it will assign string value to global value
+                tempToDoObjectContent = userInput.getText().toString();
+
+                //creating new item in database
+                db.addAgendaContentstoDB(TI.getID(), tempToDoObjectContent , "false");
+
+                //create a new toDoObject for List
+                toDoObject newtoDoObject = db.returnLastTodoObject();
+                //assign to do object to last entry into database
+
+                //add toDoObject to Listview
+                listOfToDoObjects.add(newtoDoObject);
+
+                //update listViewAdapter
+                if (listOfToDoObjects == null) {
+                    Log.d("Error: ", "Passed a null arraylist");
+                }
+
+                //refreshes the current list
+                _toDoPageAdapter.refreshList(listOfToDoObjects);
+
+                //close db conn
+                db.close();
+            }
+        });
+
+        Dialog dialog = alertBuilder.create();
+        dialog.show();
+
 
     }
 }
